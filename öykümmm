@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>İyi Ki Doğdun!</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #050508;
+      color: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+    .space-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .stars {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(1.5px 1.5px at 10% 10%, #ffffff, rgba(0,0,0,0)),
+                  radial-gradient(1.5px 1.5px at 20% 40%, #ffffff, rgba(0,0,0,0)),
+                  radial-gradient(2px 2px at 35% 70%, #ffffff, rgba(0,0,0,0)),
+                  radial-gradient(1.5px 1.5px at 50% 20%, #ffffff, rgba(0,0,0,0)),
+                  radial-gradient(2px 2px at 65% 85%, #ffffff, rgba(0,0,0,0)),
+                  radial-gradient(1.5px 1.5px at 80% 30%, #ffffff, rgba(0,0,0,0)),
+                  radial-gradient(2px 2px at 90% 60%, #ffffff, rgba(0,0,0,0));
+      background-size: 200px 200px;
+      opacity: 0.8;
+      animation: twinkle 4s infinite alternate ease-in-out;
+    }
+    @keyframes twinkle {
+      0% { opacity: 0.4; }
+      100% { opacity: 0.9; }
+    }
+    .moon {
+      position: absolute;
+      top: 40px;
+      right: 40px;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      box-shadow: -12px 10px 0 2px #fffde7;
+      filter: drop-shadow(0 0 12px rgba(255, 253, 231, 0.6));
+    }
+    .shooting-star {
+      position: absolute;
+      top: -100px;
+      width: 100px;
+      height: 2px;
+      background: linear-gradient(90deg, #fff, transparent);
+      animation: shoot 6s infinite ease-in-out;
+      opacity: 0;
+    }
+    .shooting-star:nth-child(2) {
+      top: 15%;
+      animation-delay: 2s;
+    }
+    .shooting-star:nth-child(3) {
+      top: 30%;
+      animation-delay: 4.5s;
+    }
+    @keyframes shoot {
+      0% { transform: translateX(0) translateY(0) rotate(-35deg); opacity: 1; }
+      20% { transform: translateX(-300px) translateY(200px) rotate(-35deg); opacity: 0; }
+      100% { transform: translateX(-300px) translateY(200px) rotate(-35deg); opacity: 0; }
+    }
+    .container {
+      position: relative;
+      z-index: 10;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .page {
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .hidden {
+      display: none !important;
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    .envelope-wrapper {
+      position: relative;
+      cursor: pointer;
+      margin-top: 50px;
+      width: 280px;
+      height: 180px;
+      background-color: #e63946;
+      border-radius: 0 0 10px 10px;
+      box-shadow: 0 15px 35px rgba(230, 57, 70, 0.4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.3s ease;
+    }
+    .envelope-wrapper:active {
+      transform: scale(0.98);
+    }
+    .envelope-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 140px solid transparent;
+      border-right: 140px solid transparent;
+      border-top: 100px solid #c1121f;
+      transform-origin: top;
+      transition: transform 0.4s ease;
+      z-index: 3;
+    }
+    .envelope-wrapper.open .envelope-flap {
+      transform: rotateX(180deg);
+      z-index: 1;
+    }
+    .heart-seal {
+      position: absolute;
+      top: 35px;
+      z-index: 4;
+      font-size: 32px;
+      color: #ffb703;
+      filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3));
+      transition: opacity 0.3s ease;
+    }
+    .envelope-wrapper.open .heart-seal {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .letter {
+      position: absolute;
+      bottom: 10px;
+      width: 90%;
+      background: #fff;
+      color: #2b2d42;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      transition: transform 0.6s ease, opacity 0.6s ease;
+      z-index: 2;
+      opacity: 0;
+      pointer-events: none;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      text-align: center;
+    }
+    .envelope-wrapper.open .letter {
+      transform: translateY(-130px);
+      opacity: 1;
+      pointer-events: auto;
+      z-index: 10;
+      position: relative;
+      width: 100%;
+      margin-top: 20px;
+    }
+    .floating-hearts {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 12;
+    }
+    .mini-heart {
+      position: absolute;
+      color: #ff4d6d;
+      font-size: 16px;
+      animation: floatUp 2s ease-out forwards;
+      opacity: 1;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(0.8); opacity: 1; }
+      100% { transform: translateY(-80px) scale(1.3); opacity: 0; }
+    }
+    .next-btn {
+      margin-top: 25px;
+      background: linear-gradient(135deg, #ff4d6d, #c1121f);
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 25px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
+      transition: transform 0.2s ease;
+    }
+    .next-btn:active {
+      transform: scale(0.95);
+    }
+    .card-box {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 30px 20px;
+      border-radius: 20px;
+      text-align: center;
+      width: 100%;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .date-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #ff8fa3;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px rgba(255, 143, 163, 0.5);
+    }
+    .tap-hint {
+      color: #ff8fa3;
+      font-size: 0.9rem;
+      margin-top: 15px;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="space-bg">
+    <div class="stars"></div>
+    <div class="moon"></div>
+    <div class="shooting-star" style="left: 80%;"></div>
+    <div class="shooting-star" style="left: 50%;"></div>
+    <div class="shooting-star" style="left: 30%;"></div>
+  </div>
+
+  <div class="container">
+    <div id="page1" class="page">
+      <div id="envelope" class="envelope-wrapper" onclick="openEnvelope()">
+        <div class="envelope-flap"></div>
+        <div class="heart-seal">❤️</div>
+        <div id="heartsContainer" class="floating-hearts"></div>
+      </div>
+
+      <div id="letter" class="letter hidden">
+        <h2 style="color: #c1121f; margin-bottom: 12px; font-size: 1.3rem;">İyi Ki Doğdun Sevdiğim ❤️</h2>
+        <p>
+          Hayatıma girdiğin ilk andan beri gökyüzündeki tüm yıldızlar senin için parlıyor sanki... 
+          Gülüşünle dünyamı aydınlatan, varlığıyla her günümü özel kılan en değerli varlığımsın.
+          <br><br>
+          İyi ki doğdun, iyi ki benim oldun. Yeni yaşında yüzünden gülücükler, kalbinden huzur hiç eksik olmasın. Seni çok ama çok seviyorum! ✨
+        </p>
+        <button class="next-btn" onclick="goToPage2()">Sonraki Sayfa ✨</button>
+      </div>
+
+      <div id="tapHint" class="tap-hint">Zarfa dokunarak mektubu aç ❤️</div>
+    </div>
+
+    <div id="page2" class="page hidden">
+      <div class="card-box">
+        <div class="date-title">✨ 3.10.26 Dünyanın En Güzel Günü ✨</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openEnvelope() {
+      const envelope = document.getElementById('envelope');
+      const letter = document.getElementById('letter');
+      const tapHint = document.getElementById('tapHint');
+      
+      if (!envelope.classList.contains('open')) {
+        envelope.classList.add('open');
+        tapHint.style.display = 'none';
+        createHearts();
+        
+        setTimeout(() => {
+          letter.classList.remove('hidden');
+        }, 300);
+      }
+    }
+
+    function createHearts() {
+      const container = document.getElementById('heartsContainer');
+      for (let i = 0; i < 12; i++) {
+        setTimeout(() => {
+          const heart = document.createElement('div');
+          heart.className = 'mini-heart';
+          heart.innerHTML = '❤️';
+          heart.style.left = (Math.random() * 80 + 10) + '%';
+          heart.style.bottom = (Math.random() * 20 + 40) + 'px';
+          container.appendChild(heart);
+          
+          setTimeout(() => heart.remove(), 2000);
+        }, i * 150);
+      }
+    }
+
+    function goToPage2() {
+      document.getElementById('page1').classList.add('hidden');
+      document.getElementById('page2').classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
